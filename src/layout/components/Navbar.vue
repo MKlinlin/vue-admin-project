@@ -10,7 +10,7 @@
           <!-- 头像 -->
           <img v-if="avatar" :src="avatar" class="user-avatar">
           <span v-else class="username"> {{ name?.charAt(0) }} </span>
-          <!-- 防止charAt()参数为空 -->
+          <!-- ?:可选链操作符，防止charAt()参数为空，需要vue版本2.7以上 -->
           <!-- 用户名称 -->
           <span class="name">{{ name }}</span>
           <i class="el-icon-setting" />
