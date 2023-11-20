@@ -115,3 +115,26 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+// 列表型数据转化树形结构
+
+/**
+ * 将列表数据转换为树形数据
+ * @param {Array} list - 列表数据
+ * @param {string|number} rootValue - 根节点的值
+ * @returns {Array} - 转换后的树形数据
+ */
+export function transListToTreeData(list, rootValue) {
+  const arr = []
+  list.forEach(item => {
+    if (item.pid === rootValue) {
+      // 找到了匹配的节点
+      arr.push(item)
+      // 当前节点id和当前节点的子节点的pid时相等的
+      const children = transListToTreeData(list, item.id) // 当前节点的子节点
+      // 如果大于0，说明有子节点，等于0说明没有子节点，children就是空数组，节省空间
+      item.children = children
+    }
+  })
+  return arr
+}
