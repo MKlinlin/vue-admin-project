@@ -133,7 +133,9 @@ export function transListToTreeData(list, rootValue) {
       // 当前节点id和当前节点的子节点的pid时相等的
       const children = transListToTreeData(list, item.id) // 当前节点的子节点
       // 如果大于0，说明有子节点，等于0说明没有子节点，children就是空数组，节省空间
-      item.children = children
+      if (children.length > 0) {
+        item.children = children
+      }
     }
   })
   return arr
