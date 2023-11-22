@@ -3,7 +3,7 @@
     <div class="app-container">
       <!-- 展示树形结构 -->
       <!-- 默认展开子节点 -->
-      <el-tree :expand-on-click-node="flase" default-expand-all :data="depts" :props="defaultProps">
+      <el-tree :expand-on-click-node="false" default-expand-all :data="depts" :props="defaultProps">
         <!-- 节点结构 -->
         <template v-slot="{ data }">
           <el-row style="width:100%;height:40px" type="flex" justify="space-between" align="center">
