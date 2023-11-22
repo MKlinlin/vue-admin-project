@@ -72,6 +72,9 @@ export default {
         // 调用子组件的方法是同步动作
         // 要在子组件中获取数据
         // 父组件调用子组件的方法来获取数据
+        /**
+         * Calls the `getDepartmentDetail` method on the `addDept` component after the next DOM update.
+         */
         this.$nextTick(() => {
           this.$refs.addDept.getDepartmentDetail()
         })
