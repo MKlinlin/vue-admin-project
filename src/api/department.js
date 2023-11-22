@@ -29,3 +29,12 @@ export function getDepartmentDetail(id) {
     url: `/company/department/${id}`
   })
 }
+
+// 更新部门接口
+export function updateDepartment(data) {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
+    data
+  })
+}
