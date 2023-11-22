@@ -61,8 +61,13 @@ export default {
         }, {
           trigger: 'blur',
           validator: async(rule, value, callback) => {
-            const result = await getDepartment()
+            let result = await getDepartment()
             // 判断result数组中部门名称是否已存在
+            // 判断当前是否是编辑模式
+            if (this.formData.id) {
+              result = result.filter(item => item.id !== this.formData.id) // 排除掉result中当前编辑的部门
+            }
+
             const isExist = result.some(item => item.name === value)
             if (isExist) {
               callback(new Error('部门名称已存在'))
@@ -79,7 +84,11 @@ export default {
           trigger: 'blur'
         }, {
           validator: async(rule, value, callback) => {
-            const result = await getDepartment()
+            let result = await getDepartment()
+            // 判断当前是否是编辑模式
+            if (this.formData.id) {
+              result = result.filter(item => item.id !== this.formData.id) // 排除掉result中当前编辑的部门
+            }
             const isExist = result.some(item => item.code === value)
             if (isExist) {
               callback(new Error('部门编码已存在'))
