@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getDepartment, getManagerList, addDepartment } from '@/api/department' // 导入获取部门数据的接口
+import { getDepartment, getManagerList, addDepartment, getDepartmentDetail } from '@/api/department' // 导入获取部门数据的接口
 export default {
   props: {
     showDialog: {
@@ -121,9 +121,16 @@ export default {
           this.close()
         }
       })
+    },
+    // 获取组织部门详情
+    async getDepartmentDetail() {
+      // 根据id获取部门详情
+      const result = await getDepartmentDetail(this.currentNodeId)
+      this.formData = result
     }
   }
 }
+
 </script>
 
 <style>

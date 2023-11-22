@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+// 默认类型为get
 // 获取组织架构数据
 
 export function getDepartment() {
@@ -20,5 +20,12 @@ export function addDepartment(data) {
     url: '/company/department',
     method: 'post',
     data
+  })
+}
+
+// 获取当前部门详情
+export function getDepartmentDetail(id) {
+  return request({
+    url: `/company/department/${id}`
   })
 }
