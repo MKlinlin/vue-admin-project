@@ -20,7 +20,7 @@
       <el-form-item>
         <el-row type="flex" justify="center">
           <el-col :span="12">
-            <el-button type="primary" size="mini">提交</el-button>
+            <el-button type="primary" size="mini" @click="btnOK">提交</el-button>
             <el-button size="mini" @click="close">取消</el-button>
           </el-col>
         </el-row>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getDepartment, getManagerList } from '@/api/department' // 导入获取部门数据的接口
+import { getDepartment, getManagerList, addDepartment } from '@/api/department' // 导入获取部门数据的接口
 export default {
   props: {
     showDialog: {
@@ -88,12 +88,7 @@ export default {
             }
           }
         }],
-        managerId: [{ required: true, message: '部门负责人不能为空', trigger: 'blur' }, {
-          min: 2,
-          max: 10,
-          message: '部门负责人长度为2-10个字符',
-          trigger: 'blur'
-        }],
+        managerId: [{ required: true, message: '部门负责人不能为空', trigger: 'blur' }],
         introduce: [{ required: true, message: '部门介绍不能为空', trigger: 'blur' }, {
           min: 1,
           max: 100,
@@ -114,6 +109,18 @@ export default {
     },
     async getManagerList() {
       this.managerList = await getManagerList()
+    },
+    btnOK() {
+      this.$refs.addDept.validate(async isOK => {
+        if (isOK) {
+          // 验证通过
+          await addDepartment({ ...this.formData, pid: this.currentNodeId })
+          // 通知父组件更新
+          this.$emit('updateDepartment')
+          this.$message.success('添加部门成功')
+          this.close()
+        }
+      })
     }
   }
 }

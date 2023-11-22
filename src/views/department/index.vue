@@ -28,7 +28,7 @@
     </div>
     <!-- 放置弹层 -->
     <!-- 表示会接受子组件的事件 update：showDialog，值=>属性 -->
-    <add-dept :current-node-id="currentNodeId" :show-dialog.sync="showDialog" />
+    <add-dept :current-node-id="currentNodeId" :show-dialog.sync="showDialog" @updateDepartment="getDepartment" />
   </div>
 </template>
 <script>
