@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { getDepartment } from '@/api/department' // 导入获取部门数据的接口
+import { getDepartment, delDepartment } from '@/api/department' // 导入获取部门数据的接口
 import { transListToTreeData } from '@/utils/index' // 导入工具函数
 import AddDept from './components/add-dept.vue' // 导入添加部门的组件
 export default {
@@ -79,6 +79,18 @@ export default {
           this.$refs.addDept.getDepartmentDetail()
         })
         // this.refs.addDept等同于子组件的this
+      } else {
+        // 删除部门
+        this.$confirm('您确定要删除该部门吗？').then(async() => {
+          // 确认删除
+          await delDepartment(id)
+          this.$message.success('删除部门成功')
+          // 重新拉取部门数据
+          this.getDepartment()
+        }).catch(() => {
+          // 取消删除
+        }
+        )
       }
     }
   }
