@@ -8,9 +8,21 @@
       <el-table :data="list">
         <!-- 放置列 -->
         <el-table-column prop="name" align="center" width="200" label="角色" />
-        <el-table-column prop="state" align="center" width="200" label="启用 " />
+        <el-table-column prop="state" align="center" width="200" label="启用 ">
+          <!-- 自定义列结构 -->
+          <template v-slot="{ row }">
+            {{ row.state ? '已启用' : '未启用' }}
+          </template>
+        </el-table-column>
         <el-table-column prop="description" align="center" label="描述" />
-        <el-table-column align="center" label="操作" />
+        <el-table-column align="center" label="操作">
+          <!-- 自定义列结构 -->
+          <template>
+            <el-button type="text" size="mini"> 分配权限</el-button>
+            <el-button type="text" size="mini">编辑</el-button>
+            <el-button type="text" size="mini">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页组件 -->
       <el-row type="flex" style="height:60px" align="middle" justify="end">
