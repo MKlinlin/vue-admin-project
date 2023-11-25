@@ -10,21 +10,21 @@
         <el-table-column prop="name" align="center" width="200" label="角色">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
-            <el-input v-if="row.isEdit" size="mini" />
+            <el-input v-if="row.isEdit" v-model="row.editRow.name" size="mini" />
             <span v-else>{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="state" align="center" width="200" label="启用 ">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
-            <el-switch v-if="row.isEdit" v-model="row.state" :active-value="1" :inactive-value="0" size="mini" />
+            <el-switch v-if="row.isEdit" v-model="row.editRow.state" :active-value="1" :inactive-value="0" size="mini" />
             <span v-else>{{ row.state === 1 ? '启用' : '禁用' }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="description" align="center" label="描述">
           <template v-slot="{ row }">
             <!-- 条件判断 -->
-            <el-input v-if="row.isEdit" size="mini" type="textarea" />
+            <el-input v-if="row.isEdit" v-model="row.editRow.description" size="mini" type="textarea" />
             <span v-else>{{ row.description }}</span>
           </template>
         </el-table-column>
@@ -117,6 +117,11 @@ export default {
         this.$set(item, 'isEdit', false) // this.$set(对象, 属性名, 初始值)
         // item.isEdit = false
         // 添加的动态属性 不具备响应式特点
+        this.$set(item, 'editRow', {
+          name: item.name,
+          description: item.description,
+          state: item.state
+        })
       })
     },
     // 切换分页时请求新数据
@@ -142,6 +147,10 @@ export default {
     },
     btnEditRow(row) {
       row.isEdit = true // 改变行的编辑标记
+      // 更新缓存数据
+      row.editRow.name = row.name
+      row.editRow.description = row.description
+      row.editRow.state = row.state
     }
   }
 }
