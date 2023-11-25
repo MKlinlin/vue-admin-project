@@ -3,7 +3,7 @@
     <div class="app-container">
       <!-- 角色管理内容 -->
       <div class="role-operate">
-        <el-button type="primary" size="mini">添加角色</el-button>
+        <el-button @click="showDialog=true " type="primary" size="mini">添加角色</el-button>
       </div>
       <el-table :data="list">
         <!-- 放置列 -->
@@ -34,7 +34,32 @@
           @current-change="changePage"
         />
       </el-row>
-    </div></div></template>
+    </div>
+  <!-- 放置弹层 -->
+  <el-dialog title="添加角色" :visible.sync="showDialog" width="500px">
+    <el-form label-width="120px">
+      <el-form-item label="角色名称">
+        <el-input size="mini" style="width:300px" placeholder="请输入角色名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-switch size="mini" />
+      </el-form-item>
+      <el-form-item label="角色描述">
+        <el-input type="textarea" :rows="3" size="mini" style="width:300px" placeholder="请输入角色描述">
+
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-button type="primary" size="mini">确定</el-button>
+            <el-button size="mini" @click="showDialog = false">取消</el-button>
+          </el-col>
+        </el-row>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+  </div></template>
 <script>
 import { getRoleList } from '@/api/role'
 export default {
@@ -42,6 +67,7 @@ export default {
   data() {
     return {
       list: [],
+      showDialog: false, // 是否显示添加角色弹窗
       // 分页数据
       pageParams: {
         page: 1, // 当前页
