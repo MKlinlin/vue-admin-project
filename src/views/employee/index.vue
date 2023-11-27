@@ -4,7 +4,16 @@
       <div class="left">
         <el-input style="margin-bottom:10px" type="text" prefix-icon="el-icon-search" size="small" placeholder="输入员工姓名全员搜索" />
         <!-- 树形组件 -->
-        <el-tree :data="depts" :props="defaultProps" :default-expand-all="true" :expand-on-click-node="false" :highlight-current="true" />
+        <el-tree
+          ref="deptTree"
+          node-key="id"
+          :data="depts"
+          :props="defaultProps"
+          :default-expand-all="true"
+          :expand-on-click-node="false"
+          :highlight-current="true"
+          @current-change="selectNode"
+        />
       </div>
       <div class="right">
         <el-row class="opeate-tools" type="flex" justify="end">
@@ -30,6 +39,9 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'name'
+      },
+      queryParams: {
+        departmentId: null
       }
     }
   },
@@ -40,6 +52,14 @@ export default {
     async getDepartment() {
       // 递归方法，转化树形
       this.depts = transListToTreeData(await getDepartment(), 0)
+      this.queryParams.departmentId = this.depts[0].id
+      // 树组件的渲染是异步的，所以需要等待树组件渲染完成后，再设置默认选中的节点
+      this.$nextTick(() => {
+        this.$refs.deptTree.setCurrentKey(this.queryParams.departmentId)
+      })
+    },
+    selectNode(node) {
+      this.queryParams.departmentId = node.id
     }
   }
 }
