@@ -2,7 +2,15 @@
   <div class="container">
     <div class="app-container">
       <div class="left">
-        <el-input style="margin-bottom:10px" type="text" prefix-icon="el-icon-search" size="small" placeholder="输入员工姓名全员搜索" />
+        <el-input
+          v-model="queryParams.keyword"
+          style="margin-bottom: 10px"
+          type="text"
+          prefix-icon="el-icon-search"
+          size="small"
+          placeholder="输入员工姓名全员搜索"
+          @input="changeValue"
+        />
         <!-- 树形组件 -->
         <el-tree
           ref="deptTree"
@@ -50,7 +58,7 @@
           </el-table-column>
         </el-table>
         <!-- 分页 -->
-        <el-row style="height: 60px;" type="flex" justify="end" align="middle">
+        <el-row style="height: 60px" type="flex" justify="end" align="middle">
           <el-pagination
             layout="total,prev,pager,next"
             :total="total"
@@ -59,7 +67,6 @@
             @current-change="changePage"
           />
         </el-row>
-
       </div>
     </div>
   </div>
@@ -81,7 +88,8 @@ export default {
       queryParams: {
         departmentId: null,
         page: 1,
-        pagesize: 10
+        pagesize: 10,
+        keyword: ''
       },
       total: 0, // 总条数
       list: [] // 员工列表
@@ -115,6 +123,15 @@ export default {
     changePage(newPage) {
       this.queryParams.page = newPage
       this.getEmployeeList()
+    },
+    // 输入值内容改变时触发
+    changeValue() {
+      // 单位时间内，只会触发一次
+      clearTimeout(this.timer)// 清理上一次的定时器
+      this.timer = setTimeout(() => {
+        this.queryParams.page = 1
+        this.getEmployeeList()
+      }, 500)
     }
   }
 }
@@ -133,7 +150,7 @@ export default {
     flex: 1;
     padding: 20px;
     .opeate-tools {
-      margin:10px ;
+      margin: 10px;
     }
     .username {
       height: 30px;
@@ -142,11 +159,10 @@ export default {
       text-align: center;
       border-radius: 50%;
       color: #fff;
-      background: #04C9BE;
+      background: #04c9be;
       font-size: 12px;
-      display:inline-block;
+      display: inline-block;
     }
   }
 }
-
 </style>
