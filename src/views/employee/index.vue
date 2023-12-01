@@ -50,10 +50,16 @@
           <el-table-column prop="departmentName" label="部门" />
           <el-table-column prop="timeOfEntry" label="入职时间" sortable />、
           <el-table-column label="操作" width="280px">
-            <template>
+            <template v-slot="{row}">
               <el-button size="mini" type="text">查看</el-button>
               <el-button size="mini" type="text">角色</el-button>
-              <el-button size="mini" type="text">删除</el-button>
+              <el-popconfirm
+                title="确定要删除这条数据吗？"
+                @onConfirm="confirmDel(row.id)"
+              >
+                <el-button slot="reference" style="margin-left:10px" size="mini" type="text">删除</el-button>
+              </el-popconfirm>
+
             </template>
           </el-table-column>
         </el-table>
@@ -77,7 +83,7 @@
 <script>
 import { getDepartment } from '@/api/department'
 import { transListToTreeData } from '@/utils'
-import { getEmployeeList, exportEmployee } from '@/api/employee'
+import { getEmployeeList, exportEmployee, delEmployee } from '@/api/employee'
 import FileSaver from 'file-saver'
 import ImportExcel from './components/import-excel.vue'
 export default {
@@ -146,6 +152,16 @@ export default {
       const result = await exportEmployee() // 导出所有员工接口
       // FileSaver.saveAs(blob对象,文件名)
       FileSaver.saveAs(result, '员工信息表.xlsx')// 下载文件
+    },
+    // 删除员工
+    async confirmDel(id) {
+      // alert('1')
+      await delEmployee(id)
+      if (this.list.length === 1 && this.queryParams.page > 1) {
+        this.queryParams.page--
+      }
+      this.getEmployeeList()
+      this.$message.success('删除成功')
     }
   }
 }
