@@ -99,7 +99,7 @@
 
 <script>
 import SelcetTree from './components/select-tree.vue'
-import { addEmployee } from '@/api/employee'
+import { addEmployee, getEmployeeDetail } from '@/api/employee'
 export default {
   comments: {
     SelcetTree
@@ -144,7 +144,17 @@ export default {
 
     }
   },
+  created() {
+    // 获取路由中的id
+    if (this.$route.params.id) {
+      this.getEmployeeDetail()
+    }
+  },
   methods: {
+    async getEmployeeDetail() {
+      // 根据id获取员工详情
+      this.userInfo = await getEmployeeDetail(this.$route.params.id)
+    },
     saveData() {
       this.$refs.userForm.validate(async isOK => {
         if (isOK) {
