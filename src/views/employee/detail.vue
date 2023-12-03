@@ -27,6 +27,7 @@
               <el-form-item label="手机" prop="mobile">
                 <el-input
                   v-model="userInfo.mobile"
+                  :disabled="!!this.$route.params.id"
                   size="mini"
                   class="inputW"
                 />
@@ -99,7 +100,7 @@
 
 <script>
 import SelcetTree from './components/select-tree.vue'
-import { addEmployee, getEmployeeDetail } from '@/api/employee'
+import { addEmployee, getEmployeeDetail, updateEmployee } from '@/api/employee'
 export default {
   comments: {
     SelcetTree
@@ -158,9 +159,17 @@ export default {
     saveData() {
       this.$refs.userForm.validate(async isOK => {
         if (isOK) {
+          // 判断为编辑模式还是新增模式
+          if (this.$route.params.id) {
+            // 编辑模式
+            await updateEmployee(this.userInfo)
+            this.$message.success('编辑员工成功')
+          } else {
+            // 新增模式
+            await addEmployee(this.userInfo)
+            this.$message.success('新增员工成功')
+          }
           // 校验通过
-          await addEmployee(this.userInfo)
-          this.$message.success('添加员工成功')
           this.$router.push('/employee')
         }
       })

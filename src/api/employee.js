@@ -72,3 +72,14 @@ export function getEmployeeDetail(id) {
     url: `/sys/user/${id}`
   })
 }
+
+/**
+ * 更新员工信息
+ */
+export function updateEmployee(data) {
+  return request({
+    url: `/sys/user/${data.id}`,
+    method: 'put',
+    data
+  })
+}
