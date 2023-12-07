@@ -39,7 +39,7 @@
             </template>
             <template v-else>
               <!-- 非编辑状态 -->
-              <el-button size="mini" type="text">分配权限</el-button>
+              <el-button size="mini" type="text" @click="btnPermisson">分配权限</el-button>
               <el-button size="mini" type="text" @click="btnEditRow(row)">编辑</el-button>
               <el-popconfirm title="这是一段内容确定删除吗？" @onConfirm="confirmDel(row.id)">
                 <el-button slot="reference" style="margin-left:10px" size="mini" type="text">删除</el-button>
@@ -85,10 +85,22 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <!-- 权限弹层 -->
+    <el-dialog :visible.sync="showPermissionDialog">
+      <!-- 放置权限数据 -->
+      <el-tree
+        :data="permissonData"
+        :props="{label: 'name'}"
+        :show-checkbox="true"
+        default-expand-all
+      />
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getRoleList, addRole, updateRole, deleteRole } from '@/api/role'
+import { getPermissionList } from '@/api/permission'
+import { transListToTreeData } from '@/utils'
 export default {
   name: 'Role',
   data() {
@@ -109,8 +121,9 @@ export default {
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
         description: [{ required: true, message: '角色描述不能为空', trigger: 'blur' }]
-
-      }
+      },
+      showPermissionDialog: false, // 控制权限弹层的显示隐藏
+      permissonData: [] // 权限数据
     }
   },
   created() {
@@ -188,6 +201,11 @@ export default {
         this.pageParams.page--
       }
       this.getRoleList()
+    },
+    async btnPermisson() {
+      this.showPermissionDialog = true
+      this.permissonData = transListToTreeData(await getPermissionList(), 0)
+      console.log(this.permissonData)
     }
   }
 }
