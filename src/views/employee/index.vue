@@ -52,7 +52,7 @@
           <el-table-column label="操作" width="280px">
             <template v-slot="{row}">
               <el-button size="mini" type="text" @click="$router.push(`/employee/detail/${row.id}`)">查看</el-button>
-              <el-button size="mini" type="text">角色</el-button>
+              <el-button size="mini" type="text" @click="btnRole">角色</el-button>
               <el-popconfirm
                 title="确定要删除这条数据吗？"
                 @onConfirm="confirmDel(row.id)"
@@ -77,13 +77,18 @@
     </div>
     <!-- 放置导入组件 -->
     <ImportExcel :show-excel-dialog.sync="showExcelDialog" @uploadSuccess="getEmployeeList" />
+    <el-dialog :visible.sync="showRoleDialog" title="分配角色">
+      <el-checkbox-group v-model="roleIds">
+        <el-checkbox v-for="item in roleList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+      </el-checkbox-group>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDepartment } from '@/api/department'
 import { transListToTreeData } from '@/utils'
-import { getEmployeeList, exportEmployee, delEmployee } from '@/api/employee'
+import { getEmployeeList, exportEmployee, delEmployee, getEnableRoleList } from '@/api/employee'
 import FileSaver from 'file-saver'
 import ImportExcel from './components/import-excel.vue'
 export default {
@@ -106,7 +111,10 @@ export default {
       },
       total: 0, // 总条数
       list: [], // 员工列表
-      showExcelDialog: false // 控制导入组件的显示隐藏
+      showExcelDialog: false, // 控制导入组件的显示隐藏
+      showRoleDialog: false, // 控制角色弹层的显示隐藏
+      roleList: [], // 角色列表
+      roleIds: [] // 双向绑定的角色id
     }
   },
   created() {
@@ -162,6 +170,10 @@ export default {
       }
       this.getEmployeeList()
       this.$message.success('删除成功')
+    },
+    async btnRole() {
+      this.showRoleDialog = true
+      this.roleList = await getEnableRoleList()
     }
   }
 }
