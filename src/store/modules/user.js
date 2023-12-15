@@ -34,6 +34,7 @@ const actions = {
   async getUserInfo(context) {
     const result = await getUserInfo()
     context.commit('setUserInfo', result)
+    return result // 返回结果
   },
   // 退出登录的action
   logout(context) {
