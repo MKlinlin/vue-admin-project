@@ -5,7 +5,7 @@ export default {
   component: layout,
   children: [{
     path: '',
-    name: 'permission',
+    name: 'permission1',
     component: () => import('@/views/permission'),
     meta: {
       title: '权限',
