@@ -25,6 +25,7 @@ router.beforeEach(async(to, from, next) => {
         const filterRoutes = asyncRoutes.filter(item => {
           return roles.menus.includes(item.name)
         })
+        store.commit('user/setRoutes', filterRoutes) // 提交到Vuex
         router.addRoutes([...filterRoutes, { path: '*', redirect: '/404', hidden: true }]) // 添加动态路由
         // 添加后，需要转发一下，否则会出现空白页
         next(to.path)
