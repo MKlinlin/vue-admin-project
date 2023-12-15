@@ -38,7 +38,7 @@ export default {
       default: false
     },
     currentNodeId: {
-      type: Number,
+      type: String,
       default: null
     }
   },
