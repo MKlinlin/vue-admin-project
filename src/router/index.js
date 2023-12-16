@@ -6,7 +6,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 import departmentRouter from './modules/department'
-import approvalRouter from './modules/approval'
 import attendanceRouter from './modules/attendance'
 import employeeRouter from './modules/employee'
 import permissionRouter from './modules/permission'
@@ -72,7 +71,6 @@ export const asyncRoutes = [departmentRouter,
   employeeRouter,
   permissionRouter,
   attendanceRouter,
-  approvalRouter,
   salaryRouter,
   socialRouter]
 const createRouter = () => new Router({

@@ -3,7 +3,7 @@
     <div class="app-container">
       <div class="edit-form">
         <el-form ref="userForm" :model="userInfo" :rules="rules" label-width="220px">
-          <!-- 姓名 部门 -->
+          <!-- 姓名 -->
           <el-row>
             <el-col :span="12">
               <el-form-item label="姓名" prop="username">
@@ -12,22 +12,22 @@
             </el-col>
 
           </el-row>
-          <!-- 工号 入职时间 -->
+          <!-- 工号 -->
           <el-row>
             <el-col :span="12">
               <el-form-item label="工号" prop="workNumber">
-                <!-- 不允许被修改 -->
+                <!-- 工号是系统生成的  禁用这个组件-->
                 <el-input v-model="userInfo.workNumber" disabled size="mini" class="inputW" />
               </el-form-item>
             </el-col>
           </el-row>
-          <!--手机 聘用形式  -->
+          <!--手机  -->
           <el-row>
             <el-col :span="12">
               <el-form-item label="手机" prop="mobile">
                 <el-input
                   v-model="userInfo.mobile"
-                  :disabled="!!this.$route.params.id"
+                  :disabled="!!$route.params.id"
                   size="mini"
                   class="inputW"
                 />
@@ -37,8 +37,9 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="部门" prop="departmentId">
-                <!-- 放置及联部门组件 -->
-                <selcet-tree v-model="userInfo.departmentId" class="inputW" />
+                <!-- 放置及联部门组件 会单独封装-->
+                <!-- inputW样式会给到selectTree中 template第一层的组件 -->
+                <select-tree v-model="userInfo.departmentId" class="inputW" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -100,14 +101,11 @@
 </template>
 
 <script>
-import SelcetTree from './components/select-tree.vue'
-import imageUpload from './components/image-upload.vue'
+import SelectTree from './components/select-tree.vue'
+import ImageUpload from './components/image-upload.vue'
 import { addEmployee, getEmployeeDetail, updateEmployee } from '@/api/employee'
 export default {
-  comments: {
-    SelcetTree
-  },
-  components: { SelcetTree, imageUpload },
+  components: { SelectTree, ImageUpload },
   data() {
     return {
       userInfo: {
@@ -118,7 +116,7 @@ export default {
         departmentId: null, // 部门id
         timeOfEntry: '', // 入职时间
         correctionTime: '', // 转正时间
-        staffPhoto: '' // 员工照片
+        staffPhoto: ''
       },
       rules: {
         username: [{ required: true, message: '请输入姓名', trigger: 'blur' }, {
@@ -149,30 +147,28 @@ export default {
     }
   },
   created() {
-    // 获取路由中的id
-    if (this.$route.params.id) {
-      this.getEmployeeDetail()
-    }
+    // 如何获取路由参数的中id
+    // if (this.$route.params.id) { this.getEmployeeDetail() }
+    this.$route.params.id && this.getEmployeeDetail()
   },
   methods: {
     async getEmployeeDetail() {
-      // 根据id获取员工详情
       this.userInfo = await getEmployeeDetail(this.$route.params.id)
     },
     saveData() {
       this.$refs.userForm.validate(async isOK => {
         if (isOK) {
-          // 判断为编辑模式还是新增模式
+          // 编辑模式
           if (this.$route.params.id) {
             // 编辑模式
             await updateEmployee(this.userInfo)
-            this.$message.success('编辑员工成功')
+            this.$message.success('更新员工成功')
           } else {
             // 新增模式
+            // 校验通过
             await addEmployee(this.userInfo)
             this.$message.success('新增员工成功')
           }
-          // 校验通过
           this.$router.push('/employee')
         }
       })
@@ -181,13 +177,14 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-    .edit-form {
-      background: #fff;
-      padding: 20px;
-      .inputW {
-        width: 380px
-      }
+  <style scoped lang="scss">
+  .edit-form {
+    background: #fff;
+    padding: 20px;
+    .inputW {
+      width: 380px
     }
+  }
 
-</style>
+  </style>
+
