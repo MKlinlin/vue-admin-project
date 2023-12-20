@@ -147,6 +147,7 @@
             </div>
             <div class="chart">
               <!-- 图表 -->
+              <div ref="social" style="width:100%;height:100%" />
             </div>
           </div>
         </div>
@@ -192,6 +193,7 @@
             </div>
             <div class="chart">
               <!-- 图表 -->
+              <div ref="provident" style="width:100%;height:100%" />
             </div>
           </div>
         </div>
@@ -254,6 +256,7 @@
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
 import { getHomeData, getMessageList } from '@/api/home'
+import * as echarts from 'echarts'
 export default {
   components: {
     CountTo
@@ -268,9 +271,64 @@ export default {
   computed: {
     ...mapGetters(['name', 'avatar', 'company', 'departmentName']) // 映射给了计算属性
   },
+  watch: {
+    homeData() {
+      console.log(this.homeData)
+      // 设置图表数据
+      this.social.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.homeData.socialInsurance?.xAxis
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'line',
+            data: this.homeData.socialInsurance?.yAxis,
+            areaStyle: {
+              color: '#04c9be'
+            },
+            lineStyle: {
+              color: '#04c9be'
+            }
+          }
+        ]
+      })
+      this.provident.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.homeData.providentFund?.xAxis
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'line',
+            data: this.homeData.providentFund?.yAxis,
+            areaStyle: {
+              color: '#04c9be'
+            },
+            lineStyle: {
+              color: '#04c9be'
+            }
+          }
+        ]
+      })
+    }
+  },
   created() {
     this.getHomeData()
     this.getMessageList()
+  },
+  mounted() {
+    // 获取显示的数据 设置给图标
+    this.social = echarts.init(this.$refs.social)
+    this.provident = echarts.init(this.$refs.provident)
   },
   methods: {
     async getHomeData() {
