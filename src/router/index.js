@@ -74,7 +74,7 @@ export const asyncRoutes = [departmentRouter,
   salaryRouter,
   socialRouter]
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes // 代表这些路由不需要权限(静态路由)
 })
